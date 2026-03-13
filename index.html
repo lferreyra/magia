@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Agente de Fe · Lucas</title>
 <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 /* ============================
    CSS VARIABLES — DARK / LIGHT
@@ -973,9 +974,131 @@ textarea:focus, input[type="text"]:focus {
   .app { padding: 0 12px 80px; }
   .card { padding: 16px; }
 }
+
+/* AUTH SCREEN */
+#authScreen {
+  position: fixed; inset: 0; background: var(--bg); z-index: 100;
+  display: flex; align-items: center; justify-content: center; padding: 24px;
+  transition: var(--transition-theme);
+}
+#authScreen.hidden { display: none; }
+.auth-box {
+  width: 100%; max-width: 380px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 18px; padding: 32px 28px; position: relative;
+}
+.auth-box::before {
+  content: ''; position: absolute; top: 0; left: 20%; right: 20%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0.5;
+}
+.auth-logo { text-align: center; margin-bottom: 28px; }
+.auth-logo-name { font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 1.3rem; letter-spacing: 0.08em; color: var(--accent); text-transform: uppercase; }
+.auth-logo-sub { font-family: 'Space Mono', monospace; font-size: 0.6rem; color: var(--text-muted); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 4px; }
+.auth-tabs { display: flex; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 22px; }
+.auth-tab { flex: 1; padding: 10px; background: none; border: none; color: var(--text-muted); font-family: 'Raleway', sans-serif; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.25s; }
+.auth-tab.active { background: var(--accent-dim); color: var(--accent); }
+.auth-field { margin-bottom: 14px; }
+.auth-field label { display: block; font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
+.auth-field input { border-radius: 8px; padding: 12px 14px; font-size: 0.88rem; }
+.auth-btn { width: 100%; padding: 13px; margin-top: 6px; background: var(--accent-dim); border: 1px solid var(--accent); border-radius: 10px; color: var(--accent); font-family: 'Raleway', sans-serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; transition: all 0.25s; }
+.auth-btn:hover:not(:disabled) { background: var(--accent-glow); transform: translateY(-1px); }
+.auth-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.auth-error { font-family: 'Poppins', sans-serif; font-size: 0.78rem; color: #e07070; text-align: center; margin-top: 10px; min-height: 20px; }
+.auth-divider { display: flex; align-items: center; gap: 10px; margin: 16px 0; }
+.auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.auth-divider span { font-family: 'Space Mono', monospace; font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.btn-google { width: 100%; padding: 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; color: var(--text-soft); font-family: 'Poppins', sans-serif; font-size: 0.82rem; cursor: pointer; transition: all 0.25s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+.btn-google:hover { border-color: var(--border-hover); color: var(--text); }
+
+/* USER BAR */
+.user-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.plan-badge { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; border: 1px solid; }
+.plan-badge.free { color: var(--text-muted); border-color: var(--border); background: var(--surface2); }
+.plan-badge.pro { color: var(--accent); border-color: var(--accent); background: var(--accent-dim); }
+.plan-badge.premium { color: var(--gold); border-color: var(--gold); background: var(--gold-dim); }
+.quota-bar { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; }
+.quota-chip { font-family: 'Space Mono', monospace; font-size: 0.58rem; color: var(--text-muted); background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 2px 9px; letter-spacing: 0.06em; }
+.quota-chip.low { color: #e07070; border-color: rgba(224,112,112,0.3); }
+.quota-chip.ok { color: var(--accent); border-color: var(--accent); }
+.btn-logout { font-family: 'Space Mono', monospace; font-size: 0.58rem; color: var(--text-muted); background: none; border: 1px solid var(--border); border-radius: 20px; padding: 3px 10px; cursor: pointer; letter-spacing: 0.06em; text-transform: uppercase; transition: all 0.2s; margin-left: auto; }
+.btn-logout:hover { color: var(--text); border-color: var(--border-hover); }
+
+/* LIMIT MODAL */
+#limitModal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; display: none; align-items: center; justify-content: center; padding: 24px; backdrop-filter: blur(4px); }
+#limitModal.visible { display: flex; }
+.limit-box { width: 100%; max-width: 340px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px 24px; text-align: center; animation: fadeUp 0.3s ease; }
+.limit-icon { font-size: 2rem; margin-bottom: 12px; }
+.limit-title { font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 1rem; color: var(--text); margin-bottom: 8px; }
+.limit-desc { font-family: 'Poppins', sans-serif; font-size: 0.82rem; font-weight: 300; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; }
+.limit-plans { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.limit-plan { display: flex; align-items: center; justify-content: space-between; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; }
+.limit-plan-name { font-family: 'Raleway', sans-serif; font-weight: 600; font-size: 0.82rem; color: var(--text); }
+.limit-plan-detail { font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--text-muted); margin-top: 2px; }
+.limit-plan-price { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--accent); }
+.btn-close-modal { font-family: 'Poppins', sans-serif; font-size: 0.78rem; color: var(--text-muted); background: none; border: 1px solid var(--border); border-radius: 8px; padding: 8px 20px; cursor: pointer; transition: all 0.2s; }
+.btn-close-modal:hover { color: var(--text); }
 </style>
 </head>
 <body>
+
+<!-- AUTH SCREEN -->
+<div id="authScreen">
+  <div class="auth-box">
+    <div class="auth-logo">
+      <div class="auth-logo-name">Agente de Fe</div>
+      <div class="auth-logo-sub">Lain · Parise · Peirce</div>
+    </div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabLogin" onclick="showAuthTab('login')">Ingresar</button>
+      <button class="auth-tab" id="tabRegister" onclick="showAuthTab('register')">Registrarse</button>
+    </div>
+    <div id="formLogin">
+      <div class="auth-field"><label>Email</label><input type="text" id="loginEmail" placeholder="tu@email.com"></div>
+      <div class="auth-field"><label>Contraseña</label><input type="password" id="loginPassword" placeholder="••••••••"></div>
+      <button class="auth-btn" id="btnLogin" onclick="doLogin()">Ingresar</button>
+      <div class="auth-divider"><span>o</span></div>
+      <button class="btn-google" onclick="doGoogleLogin()">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.961H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.961L3.964 6.293C4.672 4.166 6.656 3.58 9 3.58z"/></svg>
+        Continuar con Google
+      </button>
+    </div>
+    <div id="formRegister" style="display:none;">
+      <div class="auth-field"><label>Nombre</label><input type="text" id="regName" placeholder="Tu nombre"></div>
+      <div class="auth-field"><label>Email</label><input type="text" id="regEmail" placeholder="tu@email.com"></div>
+      <div class="auth-field"><label>Contraseña</label><input type="password" id="regPassword" placeholder="Mínimo 6 caracteres"></div>
+      <button class="auth-btn" id="btnRegister" onclick="doRegister()">Crear cuenta</button>
+      <div class="auth-divider"><span>o</span></div>
+      <button class="btn-google" onclick="doGoogleLogin()">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.961H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.961L3.964 6.293C4.672 4.166 6.656 3.58 9 3.58z"/></svg>
+        Continuar con Google
+      </button>
+    </div>
+    <div class="auth-error" id="authError"></div>
+  </div>
+</div>
+
+<!-- LIMIT MODAL -->
+<div id="limitModal">
+  <div class="limit-box">
+    <div class="limit-icon">🔱</div>
+    <div class="limit-title">Límite diario alcanzado</div>
+    <div class="limit-desc">Llegaste al máximo de consultas de hoy para tu plan. El contador se reinicia a medianoche.</div>
+    <div class="limit-plans">
+      <div class="limit-plan">
+        <div><div class="limit-plan-name">Free</div><div class="limit-plan-detail">3 chat · 1 decreto · 1 desafío/día</div></div>
+        <div class="limit-plan-price">Gratis</div>
+      </div>
+      <div class="limit-plan" style="border-color:var(--accent);">
+        <div><div class="limit-plan-name" style="color:var(--accent);">Pro ✦</div><div class="limit-plan-detail">20 chat · 5 decretos · 5 desafíos/día</div></div>
+        <div class="limit-plan-price">$5 USD/mes</div>
+      </div>
+      <div class="limit-plan" style="border-color:var(--gold);">
+        <div><div class="limit-plan-name" style="color:var(--gold);">Premium ✦✦</div><div class="limit-plan-detail">Ilimitado en todo</div></div>
+        <div class="limit-plan-price">$12 USD/mes</div>
+      </div>
+    </div>
+    <button class="btn-close-modal" onclick="closeLimitModal()">Entendido</button>
+  </div>
+</div>
 
 <div class="app">
 
@@ -995,6 +1118,12 @@ textarea:focus, input[type="text"]:focus {
 
   <div class="date-row">
     <span class="date-pill" id="dateBadge"></span>
+  </div>
+
+  <div class="user-bar" id="userBar" style="display:none;">
+    <span class="plan-badge free" id="planBadge">Free</span>
+    <div class="quota-bar" id="quotaBar"></div>
+    <button class="btn-logout" onclick="doLogout()">Salir</button>
   </div>
 
   <!-- TABS -->
@@ -1333,42 +1462,192 @@ textarea:focus, input[type="text"]:focus {
 
 <script>
 // ============================
-// CONFIG
+// SUPABASE CONFIG
+// Reemplazá estos valores con los de tu proyecto en supabase.com
+// ============================
+const SUPABASE_URL = 'https://TU_PROYECTO.supabase.co';
+const SUPABASE_ANON_KEY = 'TU_ANON_KEY';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ============================
+// GROQ CONFIG
 // ============================
 const GROQ_KEY = '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';
 const MODEL = 'llama-3.3-70b-versatile';
 
-const SYSTEM_PROMPT = `Sos el Agente de Fe de Lucas — un guía espiritual personal que integra tres marcos:
+// ============================
+// PLANES Y LIMITES DIARIOS
+// ============================
+const PLANES = {
+  free:    { chat: 3,  decreto: 1, desafio: 1, peirce: 1 },
+  pro:     { chat: 20, decreto: 5, desafio: 5, peirce: 5 },
+  premium: { chat: 999, decreto: 999, desafio: 999, peirce: 999 }
+};
 
-1. LAIN GARCÍA CALVO: Fe activa como tecnología espiritual. La fe no es espera pasiva, es acción desde la certeza de que ya se posee lo que se desea. El creer genera el ver, no al revés. La gratitud como estado base. El deseo cumplido como punto de partida, no de llegada.
+let currentUser = null;
+let currentPlan = 'free';
+let todayUsage = { chat: 0, decreto: 0, desafio: 0, peirce: 0 };
+let chatHistory = [];
 
-2. JOSÉ LUIS PARISE — LOS ONCE PASOS DE LA MAGIA:
-- El Universo cumple exactamente lo que ordenás con tu PALABRA, no con tu intención ni imagen.
+const SYSTEM_PROMPT = `Sos el Agente de Fe — un guia espiritual personal que integra tres marcos:
+
+1. LAIN GARCIA CALVO: Fe activa como tecnologia espiritual. La fe no es espera pasiva, es accion desde la certeza de que ya se posee lo que se desea. El creer genera el ver, no al reves. La gratitud como estado base.
+
+2. JOSE LUIS PARISE — LOS ONCE PASOS DE LA MAGIA:
+- El Universo cumple exactamente lo que ordenas con tu PALABRA, no con tu intencion ni imagen.
 - "Quiero adelgazar" ordena engordar. "Voy a buscar trabajo" ordena no encontrarlo. La Palabra manda.
-- Las 3 Esfinges (trampas del yo): Espera, Justificación para detenerse, Combate hacia afuera.
+- Las 3 Esfinges: Espera, Justificacion para detenerse, Combate hacia afuera.
 - InBocar = ordenar al Universo con la Boca. La Escucha es el puente entre la Idea y la Palabra real.
-- Simetría: lo externo siempre refleja lo interno. Las Casualidades son el Oráculo.
-- El Mago no pregunta CÓMO, solo ordena QUÉ. El Universo encuentra el Cómo.
-- Arranque Bifásico: cambio de posición interna para dejar atrás lo que frena.
-- El Combate es la única opción válida: seguir avanzando sin negociar lo innegociable.
+- Simetria: lo externo siempre refleja lo interno. Las Casualidades son el Oraculo.
+- El Mago no pregunta COMO, solo ordena QUE. El Universo encuentra el Como.
+- Arranque Bifasico: cambio de posicion interna para dejar atras lo que frena.
+- El Combate es la unica opcion valida: seguir avanzando sin negociar lo innegociable.
 
 3. DIAGRAMA DE PEIRCE (Parise):
-- 4 cuadrantes: Lo Posible (cesa de escribirse), Lo Imposible (no cesa de no escribirse), Lo Necesario (no cesa de escribirse), Lo Contingente (cesa de no escribirse).
-- Cada cuadrante tiene su trampa: Esfinges, FDD (Falla Desde Donde), beneficio secundario, "a veces sí a veces no".
-- El tiempo lineal (pretexto) vs tiempo circular (texto). La resolución es siempre en tiempo circular.
-- 3 tiempos lógicos: Instante para ver → Tiempo para comprender → Momento para concluir.
+- 4 cuadrantes: Lo Posible, Lo Imposible, Lo Necesario, Lo Contingente.
+- Cada cuadrante tiene su trampa: Esfinges, FDD, beneficio secundario, "a veces si a veces no".
+- Tiempo lineal (pretexto) vs tiempo circular (texto). La resolucion es siempre en tiempo circular.
+- 3 tiempos logicos: Instante para ver → Tiempo para comprender → Momento para concluir.
 
-REGLAS DE ORO PARA TUS DECLARACIONES:
-- Las afirmaciones que favorecen a Lucas van SIEMPRE en tiempo PRESENTE: "yo ahora soy...", "yo ahora tengo...", "yo ahora gano..."
-- Las declaraciones que describen lo que Lucas dejó atrás van en tiempo PASADO: "yo antes era...", "yo me comportaba de...", "yo era pobre..."
-- NUNCA en futuro: prohibido decir "voy a ser", "quiero lograr", "algún día tendré".
+REGLAS DE ORO:
+- Afirmaciones que favorecen: SIEMPRE en presente: "yo ahora soy...", "yo ahora tengo..."
+- Lo que se dejo atras: en PASADO: "yo antes era...", "yo me comportaba de..."
+- NUNCA en futuro.
 
-ESTILO: Hablale de vos (rioplatense). Directo, profundo, sin listas largas. Integrá los tres marcos naturalmente. Podés citar versículos bíblicos aplicados cuando sean pertinentes. Nunca seas condescendiente. Sos un espejo que devuelve claridad.
+ESTILO: Habla de vos (rioplatense). Directo, profundo, sin listas largas. Podes citar versiculos biblicos. Nunca seas condescendiente.`;
 
-Lucas tiene emprendimientos activos: OLEAD (IA para concesionarias), Danucci (heladería, 10 años), proyectos de ebooks, desarrollo web. Su pareja es Dani.`;
+// ============================
+// AUTH SCREEN
+// ============================
+function showAuthTab(tab) {
+  document.getElementById('formLogin').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('formRegister').style.display = tab === 'register' ? 'block' : 'none';
+  document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
+  document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
+  document.getElementById('authError').textContent = '';
+}
 
-// Chat history
-let chatHistory = [];
+function setAuthError(msg) { document.getElementById('authError').textContent = msg; }
+
+function setAuthLoading(btnId, loading) {
+  const btn = document.getElementById(btnId);
+  btn.disabled = loading;
+  btn.textContent = loading ? 'Procesando...' : (btnId === 'btnLogin' ? 'Ingresar' : 'Crear cuenta');
+}
+
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass = document.getElementById('loginPassword').value;
+  if (!email || !pass) { setAuthError('Completa email y contrasena.'); return; }
+  setAuthLoading('btnLogin', true);
+  const { error } = await sb.auth.signInWithPassword({ email, password: pass });
+  setAuthLoading('btnLogin', false);
+  if (error) setAuthError(translateAuthError(error.message));
+}
+
+async function doRegister() {
+  const name = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const pass = document.getElementById('regPassword').value;
+  if (!name || !email || !pass) { setAuthError('Completa todos los campos.'); return; }
+  if (pass.length < 6) { setAuthError('La contrasena debe tener al menos 6 caracteres.'); return; }
+  setAuthLoading('btnRegister', true);
+  const { data, error } = await sb.auth.signUp({ email, password: pass, options: { data: { name } } });
+  setAuthLoading('btnRegister', false);
+  if (error) { setAuthError(translateAuthError(error.message)); return; }
+  if (data.user) {
+    await sb.from('usuarios').upsert({ id: data.user.id, email, name, plan: 'free', created_at: new Date().toISOString() });
+  }
+  setAuthError('Cuenta creada. Verifica tu email si se requiere confirmacion.');
+}
+
+async function doGoogleLogin() {
+  const { error } = await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.href } });
+  if (error) setAuthError(translateAuthError(error.message));
+}
+
+async function doLogout() {
+  await sb.auth.signOut();
+  currentUser = null; currentPlan = 'free';
+  todayUsage = { chat: 0, decreto: 0, desafio: 0, peirce: 0 };
+  document.getElementById('authScreen').classList.remove('hidden');
+  document.getElementById('userBar').style.display = 'none';
+}
+
+function translateAuthError(msg) {
+  if (msg.includes('Invalid login')) return 'Email o contrasena incorrectos.';
+  if (msg.includes('Email not confirmed')) return 'Confirma tu email antes de ingresar.';
+  if (msg.includes('already registered')) return 'Ese email ya esta registrado.';
+  return msg;
+}
+
+// ============================
+// SESSION
+// ============================
+sb.auth.onAuthStateChange(async (event, session) => {
+  if (session?.user) {
+    currentUser = session.user;
+    await loadUserProfile();
+    await loadTodayUsage();
+    document.getElementById('authScreen').classList.add('hidden');
+    updateUserBar();
+    await renderDiaryEntries();
+  } else {
+    document.getElementById('authScreen').classList.remove('hidden');
+    document.getElementById('userBar').style.display = 'none';
+  }
+});
+
+async function loadUserProfile() {
+  const { data } = await sb.from('usuarios').select('plan, name').eq('id', currentUser.id).single();
+  if (data) { currentPlan = data.plan || 'free'; }
+  else {
+    await sb.from('usuarios').upsert({ id: currentUser.id, email: currentUser.email,
+      name: currentUser.user_metadata?.name || currentUser.email.split('@')[0], plan: 'free', created_at: new Date().toISOString() });
+    currentPlan = 'free';
+  }
+}
+
+async function loadTodayUsage() {
+  const today = new Date().toISOString().split('T')[0];
+  const { data } = await sb.from('consultas').select('tipo').eq('user_id', currentUser.id)
+    .gte('created_at', today + 'T00:00:00').lte('created_at', today + 'T23:59:59');
+  todayUsage = { chat: 0, decreto: 0, desafio: 0, peirce: 0 };
+  if (data) data.forEach(r => { if (todayUsage[r.tipo] !== undefined) todayUsage[r.tipo]++; });
+}
+
+async function registerUsage(tipo) {
+  if (!currentUser) return;
+  await sb.from('consultas').insert({ user_id: currentUser.id, tipo, created_at: new Date().toISOString() });
+  todayUsage[tipo] = (todayUsage[tipo] || 0) + 1;
+  updateUserBar();
+}
+
+function canUse(tipo) {
+  return todayUsage[tipo] < (PLANES[currentPlan]?.[tipo] ?? 1);
+}
+
+function showLimitModal() { document.getElementById('limitModal').classList.add('visible'); }
+function closeLimitModal() { document.getElementById('limitModal').classList.remove('visible'); }
+
+// ============================
+// USER BAR UI
+// ============================
+function updateUserBar() {
+  const bar = document.getElementById('userBar');
+  const badge = document.getElementById('planBadge');
+  const quotaBar = document.getElementById('quotaBar');
+  bar.style.display = 'flex';
+  badge.className = 'plan-badge ' + currentPlan;
+  badge.textContent = { free: 'Free', pro: 'Pro ✦', premium: 'Premium ✦✦' }[currentPlan] || 'Free';
+  const tipos = { chat: '◎', decreto: '✦', desafio: '⚡', peirce: '◈' };
+  quotaBar.innerHTML = Object.entries(tipos).map(([tipo, icon]) => {
+    const rest = Math.max(0, PLANES[currentPlan][tipo] - (todayUsage[tipo] || 0));
+    const inf = PLANES[currentPlan][tipo] >= 999;
+    const cls = inf ? '' : (rest <= 1 ? 'low' : 'ok');
+    return `<span class="quota-chip ${cls}">${icon} ${inf ? '∞' : rest}</span>`;
+  }).join('');
+}
 
 // ============================
 // THEME
@@ -1380,8 +1659,7 @@ function initTheme() {
 }
 
 function toggleTheme() {
-  const current = document.documentElement.getAttribute('data-theme');
-  const next = current === 'dark' ? 'light' : 'dark';
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('fe_theme', next);
   updateToggleUI(next);
@@ -1390,13 +1668,8 @@ function toggleTheme() {
 function updateToggleUI(theme) {
   const track = document.getElementById('toggleTrack');
   const label = document.getElementById('themeLabel');
-  if (theme === 'light') {
-    track.classList.add('on');
-    label.textContent = '☾';
-  } else {
-    track.classList.remove('on');
-    label.textContent = '☀';
-  }
+  track.classList.toggle('on', theme === 'light');
+  label.textContent = theme === 'light' ? '☾' : '☀';
 }
 
 // ============================
@@ -1404,10 +1677,9 @@ function updateToggleUI(theme) {
 // ============================
 function initDate() {
   const now = new Date();
-  const days = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
-  const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-  const str = `${days[now.getDay()]} ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
-  document.getElementById('dateBadge').textContent = str;
+  const days = ['Dom','Lun','Mar','Mie','Jue','Vie','Sab'];
+  const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  document.getElementById('dateBadge').textContent = `${days[now.getDay()]} ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
 }
 
 // ============================
@@ -1417,128 +1689,77 @@ function switchTab(name) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.getElementById('panel-' + name).classList.add('active');
-  const tabs = document.querySelectorAll('.tab');
-  const tabMap = ['afirmar', 'desafio', 'peirce', 'diario', 'chat'];
-  const idx = tabMap.indexOf(name);
-  if (idx >= 0) tabs[idx].classList.add('active');
+  const idx = ['afirmar','desafio','peirce','diario','chat'].indexOf(name);
+  if (idx >= 0) document.querySelectorAll('.tab')[idx].classList.add('active');
 }
 
 // ============================
-// GROQ API CALL
+// GROQ
 // ============================
 async function callGroq(messages, onChunk) {
   const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${GROQ_KEY}`
-    },
-    body: JSON.stringify({
-      model: MODEL,
-      messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages],
-      max_tokens: 900,
-      temperature: 0.82,
-      stream: true
-    })
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${GROQ_KEY}` },
+    body: JSON.stringify({ model: MODEL, messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages], max_tokens: 900, temperature: 0.82, stream: true })
   });
-
   const reader = res.body.getReader();
   const decoder = new TextDecoder();
   let full = '';
-
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
-    const chunk = decoder.decode(value);
-    const lines = chunk.split('\n').filter(l => l.startsWith('data: ') && l !== 'data: [DONE]');
-    for (const line of lines) {
-      try {
-        const data = JSON.parse(line.replace('data: ', ''));
-        const text = data.choices?.[0]?.delta?.content || '';
-        if (text) { full += text; if (onChunk) onChunk(full); }
-      } catch {}
+    for (const line of decoder.decode(value).split('\n').filter(l => l.startsWith('data: ') && l !== 'data: [DONE]')) {
+      try { const t = JSON.parse(line.slice(6)).choices?.[0]?.delta?.content || ''; if (t) { full += t; onChunk?.(full); } } catch {}
     }
   }
   return full;
 }
 
 // ============================
-// AFIRMAR — Generar decretos
+// AFIRMAR
 // ============================
 async function generateDecrees() {
+  if (!canUse('decreto')) { showLimitModal(); return; }
   const btn = document.getElementById('btnDecrees');
-  const responseArea = document.getElementById('decreesResponse');
+  const resp = document.getElementById('decreesResponse');
   const textEl = document.getElementById('decreesText');
   const labelEl = document.getElementById('decreesLabel');
-
-  btn.disabled = true;
-  btn.innerHTML = '<span>...</span> Generando';
-  responseArea.classList.add('visible');
-  labelEl.className = 'response-label';
-  labelEl.textContent = 'Agente procesando';
-  textEl.textContent = '';
-
+  btn.disabled = true; btn.innerHTML = '<span>...</span> Generando';
+  resp.classList.add('visible'); labelEl.className = 'response-label'; labelEl.textContent = 'Agente procesando'; textEl.textContent = '';
   const today = new Date().toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' });
-
   try {
-    const msgs = [{ role: 'user', content: `Generame 4 decretos o declaraciones personales poderosas para Lucas para hoy ${today}. 
-
-REGLA ESTRICTA:
-- Las afirmaciones positivas van en tiempo PRESENTE: "Yo ahora...", "Yo soy...", "Yo tengo..."
-- Las que describe algo superado van en tiempo PASADO: "Yo antes era...", "Yo me comportaba..."
-- NUNCA en futuro.
-
-Que sean específicas para su realidad como emprendedor (OLEAD, Danucci, proyectos digitales). Integrá la lógica de Parise (Palabra que ordena), Lain (fe activa) y algún versículo bíblico si corresponde. Sé directo y potente. Formato: una por línea, sin numeración, sin explicaciones largas.` }];
-
-    await callGroq(msgs, (text) => { textEl.textContent = text; });
-    labelEl.className = 'response-label done';
-    labelEl.textContent = 'Decretos generados';
-  } catch (e) {
-    textEl.textContent = 'Error al conectar con el agente. Verificá tu conexión.';
-  }
-
-  btn.disabled = false;
-  btn.innerHTML = '<span>⟳</span> Generar nuevos decretos con IA';
+    await callGroq([{ role: 'user', content: `Generame 4 decretos personales para hoy ${today}. REGLA: afirmaciones positivas en PRESENTE ("Yo ahora...", "Yo soy..."), lo superado en PASADO ("Yo antes era..."), NUNCA en futuro. Una por linea, sin numeracion.` }], t => textEl.textContent = t);
+    labelEl.className = 'response-label done'; labelEl.textContent = 'Decretos generados';
+    await registerUsage('decreto');
+  } catch { textEl.textContent = 'Error de conexion.'; }
+  btn.disabled = false; btn.innerHTML = '<span>⟳</span> Generar nuevos decretos con IA';
 }
 
 // ============================
-// DESAFÍO
+// DESAFIO
 // ============================
 async function processChallenge() {
+  if (!canUse('desafio')) { showLimitModal(); return; }
   const input = document.getElementById('challengeInput').value.trim();
-  if (!input) { alert('Describí tu desafío primero.'); return; }
-
+  if (!input) { alert('Describe tu desafio primero.'); return; }
   const btn = document.getElementById('btnChallenge');
-  const responseArea = document.getElementById('challengeResponse');
+  const resp = document.getElementById('challengeResponse');
   const textEl = document.getElementById('challengeText');
   const labelEl = document.getElementById('challengeLabel');
-
-  btn.disabled = true;
-  btn.innerHTML = '<span>...</span> Procesando';
-  responseArea.classList.add('visible');
-  labelEl.className = 'response-label';
-  labelEl.textContent = 'Agente procesando';
-  textEl.textContent = '';
-
+  btn.disabled = true; btn.innerHTML = '<span>...</span> Procesando';
+  resp.classList.add('visible'); labelEl.className = 'response-label'; labelEl.textContent = 'Agente procesando'; textEl.textContent = '';
   try {
-    const msgs = [{ role: 'user', content: `Este es mi desafío de hoy: "${input}"
+    await callGroq([{ role: 'user', content: `Este es mi desafio: "${input}"
 
-Guiame desde tres ángulos:
-1. ¿Qué Palabra estoy usando realmente (Parise)? ¿Qué le estoy ordenando al Universo sin darme cuenta?
-2. ¿En qué cuadrante del Diagrama de Peirce estoy operando? ¿Cuál es mi trampa?
-3. ¿Qué acción de fe concreta me sugiere Lain para hoy?
+1. Que Palabra estoy usando (Parise)? Que le ordeno al Universo sin darme cuenta?
+2. En que cuadrante de Peirce estoy? Cual es mi trampa?
+3. Que accion de fe sugiere Lain?
 
-Si hay un versículo bíblico que ilumine esto, citalo. Sé directo y específico. Terminá con UNA declaración en tiempo presente que capture la posición correcta.` }];
-
-    await callGroq(msgs, (text) => { textEl.textContent = text; });
-    labelEl.className = 'response-label done';
-    labelEl.textContent = 'Guía recibida';
-  } catch (e) {
-    textEl.textContent = 'Error al conectar. Verificá tu conexión.';
-  }
-
-  btn.disabled = false;
-  btn.innerHTML = '<span>✦</span> Recibir guía espiritual y semiótica';
+Termina con UNA declaracion en tiempo presente.` }], t => textEl.textContent = t);
+    labelEl.className = 'response-label done'; labelEl.textContent = 'Guia recibida';
+    await registerUsage('desafio');
+  } catch { textEl.textContent = 'Error de conexion.'; }
+  btn.disabled = false; btn.innerHTML = '<span>✦</span> Recibir guia espiritual y semiotica';
 }
 
 // ============================
@@ -1553,178 +1774,105 @@ function selectQuadrant(n) {
 }
 
 async function processPeirce() {
+  if (!canUse('peirce')) { showLimitModal(); return; }
   const input = document.getElementById('peirceInput').value.trim();
-  if (!input) { alert('Describí tu situación primero.'); return; }
-
-  const quadrantNames = { 1: 'Lo Posible', 2: 'Lo Imposible', 3: 'Lo Necesario', 4: 'Lo Contingente' };
-  const qInfo = selectedQuadrant ? ` (yo creo que estoy en el cuadrante de ${quadrantNames[selectedQuadrant]})` : '';
-
+  if (!input) { alert('Describe tu situacion primero.'); return; }
+  const qNames = { 1: 'Lo Posible', 2: 'Lo Imposible', 3: 'Lo Necesario', 4: 'Lo Contingente' };
+  const qInfo = selectedQuadrant ? ` (creo que estoy en ${qNames[selectedQuadrant]})` : '';
   const btn = document.getElementById('btnPeirce');
-  const responseArea = document.getElementById('peirceResponse');
+  const resp = document.getElementById('peirceResponse');
   const textEl = document.getElementById('peirceText');
   const labelEl = document.getElementById('peirceLabel');
-
-  btn.disabled = true;
-  btn.innerHTML = '<span>...</span> Analizando';
-  responseArea.classList.add('visible');
-  labelEl.className = 'response-label';
-  labelEl.textContent = 'Agente procesando';
-  textEl.textContent = '';
-
+  btn.disabled = true; btn.innerHTML = '<span>...</span> Analizando';
+  resp.classList.add('visible'); labelEl.className = 'response-label'; labelEl.textContent = 'Agente procesando'; textEl.textContent = '';
   try {
-    const msgs = [{ role: 'user', content: `Mi situación${qInfo}: "${input}"
+    await callGroq([{ role: 'user', content: `Mi situacion${qInfo}: "${input}"
 
-Haceme un diagnóstico peirceano completo:
-- ¿En qué cuadrante del Diagrama de Peirce estoy realmente?
-- ¿Cuál es la trampa específica del yo en este caso (Esfinge, FDD, beneficio secundario, contingencia)?
-- ¿Estoy operando en tiempo lineal o circular?
-- ¿Cuál es el ADO (lo que NO hay que hacer) en esta Zona de Emergencia?
-- ¿Cuál sería el movimiento correcto desde el tiempo circular?
-
-Integrá también lo que dice Parise sobre la Palabra que ordeno en esta situación. Terminá con una declaración en tiempo PRESENTE que reposicione mi lugar de enunciación.` }];
-
-    await callGroq(msgs, (text) => { textEl.textContent = text; });
-    labelEl.className = 'response-label done';
-    labelEl.textContent = 'Diagnóstico completo';
-  } catch (e) {
-    textEl.textContent = 'Error al conectar. Verificá tu conexión.';
-  }
-
-  btn.disabled = false;
-  btn.innerHTML = '<span>◈</span> Diagnóstico semiótico con IA';
+Diagnostico peirceano: cuadrante real, trampa del yo, tiempo lineal o circular, ADO en la Zona de Emergencia, movimiento correcto. Integra la Palabra que ordeno segun Parise. Termina con una declaracion en tiempo PRESENTE.` }], t => textEl.textContent = t);
+    labelEl.className = 'response-label done'; labelEl.textContent = 'Diagnostico completo';
+    await registerUsage('peirce');
+  } catch { textEl.textContent = 'Error de conexion.'; }
+  btn.disabled = false; btn.innerHTML = '<span>◈</span> Diagnostico semiotico con IA';
 }
 
 // ============================
 // DIARIO
 // ============================
-function initDiary() {
-  const container = document.getElementById('gratitudeInputs');
-  container.innerHTML = '';
-  for (let i = 1; i <= 3; i++) {
-    container.innerHTML += `
-      <div class="gratitude-row">
-        <span class="gratitude-num">${i}</span>
-        <input type="text" id="grat${i}" placeholder="Hoy agradezco...">
-      </div>`;
-  }
-  renderDiaryEntries();
+function initDiaryInputs() {
+  const c = document.getElementById('gratitudeInputs');
+  c.innerHTML = [1,2,3].map(i => `<div class="gratitude-row"><span class="gratitude-num">${i}</span><input type="text" id="grat${i}" placeholder="Hoy agradezco..."></div>`).join('');
 }
 
-function saveDiary() {
-  const g1 = document.getElementById('grat1').value.trim();
-  const g2 = document.getElementById('grat2').value.trim();
-  const g3 = document.getElementById('grat3').value.trim();
+async function saveDiary() {
+  const g = [1,2,3].map(i => document.getElementById('grat'+i).value.trim()).filter(Boolean);
   const text = document.getElementById('diaryText').value.trim();
-
-  const gratitudes = [g1, g2, g3].filter(Boolean);
-  if (!text && gratitudes.length === 0) { alert('Completá al menos un campo.'); return; }
-
-  const entries = JSON.parse(localStorage.getItem('fe_diary') || '[]');
-  const now = new Date();
-  entries.unshift({
-    date: now.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }),
-    gratitudes,
-    text,
-    ts: now.getTime()
-  });
-  if (entries.length > 60) entries.pop();
-  localStorage.setItem('fe_diary', JSON.stringify(entries));
-
-  // Clear inputs
-  ['grat1','grat2','grat3','diaryText'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
-
-  renderDiaryEntries();
+  if (!text && !g.length) { alert('Completa al menos un campo.'); return; }
+  if (currentUser) {
+    await sb.from('diario').insert({ user_id: currentUser.id, gratitudes: g, reflexion: text, created_at: new Date().toISOString() });
+  } else {
+    const e = JSON.parse(localStorage.getItem('fe_diary') || '[]');
+    e.unshift({ date: new Date().toLocaleDateString('es-AR', { weekday:'long', day:'numeric', month:'long', year:'numeric' }), gratitudes: g, text, ts: Date.now() });
+    if (e.length > 60) e.pop();
+    localStorage.setItem('fe_diary', JSON.stringify(e));
+  }
+  [1,2,3].forEach(i => document.getElementById('grat'+i).value = '');
+  document.getElementById('diaryText').value = '';
+  await renderDiaryEntries();
   alert('✦ Guardado en tu diario.');
 }
 
-function renderDiaryEntries() {
-  const entries = JSON.parse(localStorage.getItem('fe_diary') || '[]');
-  const container = document.getElementById('diaryEntries');
-  if (!entries.length) {
-    container.innerHTML = '<div class="empty-state">El diario está en blanco. Comenzá hoy.</div>';
-    return;
+async function renderDiaryEntries() {
+  const c = document.getElementById('diaryEntries');
+  if (currentUser) {
+    const { data } = await sb.from('diario').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false }).limit(30);
+    if (!data?.length) { c.innerHTML = '<div class="empty-state">El diario esta en blanco. Comenza hoy.</div>'; return; }
+    c.innerHTML = data.map(e => {
+      const d = new Date(e.created_at).toLocaleDateString('es-AR', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+      const gs = Array.isArray(e.gratitudes) ? e.gratitudes : [];
+      return `<div class="diary-entry"><div class="diary-entry-date">${d}</div>${gs.length ? `<div class="diary-entry-gratitudes">${gs.map(g=>`<span class="gtag">✦ ${g}</span>`).join('')}</div>` : ''}${e.reflexion ? `<div class="diary-entry-text">${e.reflexion}</div>` : ''}</div>`;
+    }).join('');
+  } else {
+    const entries = JSON.parse(localStorage.getItem('fe_diary') || '[]');
+    if (!entries.length) { c.innerHTML = '<div class="empty-state">El diario esta en blanco. Comenza hoy.</div>'; return; }
+    c.innerHTML = entries.map(e => `<div class="diary-entry"><div class="diary-entry-date">${e.date}</div>${e.gratitudes?.length ? `<div class="diary-entry-gratitudes">${e.gratitudes.map(g=>`<span class="gtag">✦ ${g}</span>`).join('')}</div>` : ''}${e.text ? `<div class="diary-entry-text">${e.text}</div>` : ''}</div>`).join('');
   }
-  container.innerHTML = entries.map(e => `
-    <div class="diary-entry">
-      <div class="diary-entry-date">${e.date}</div>
-      ${e.gratitudes && e.gratitudes.length ? `<div class="diary-entry-gratitudes">${e.gratitudes.map(g => `<span class="gtag">✦ ${g}</span>`).join('')}</div>` : ''}
-      ${e.text ? `<div class="diary-entry-text">${e.text}</div>` : ''}
-    </div>
-  `).join('');
 }
 
 // ============================
 // CHAT
 // ============================
-function chatKeydown(e) {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    sendChat();
-  }
-}
+function chatKeydown(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); } }
 
 async function sendChat() {
+  if (!canUse('chat')) { showLimitModal(); return; }
   const input = document.getElementById('chatInput');
   const msg = input.value.trim();
   if (!msg) return;
-
-  input.value = '';
-  const btn = document.getElementById('btnSend');
-  btn.disabled = true;
-
+  input.value = ''; document.getElementById('btnSend').disabled = true;
   addChatMsg('user', msg);
   chatHistory.push({ role: 'user', content: msg });
-
-  // Typing indicator
-  const typingId = addChatMsg('agent', '···', true);
-
+  const tid = addChatMsg('agent', '···', true);
   try {
-    let fullText = '';
-    await callGroq(chatHistory, (text) => {
-      fullText = text;
-      updateChatMsg(typingId, text);
-    });
-    chatHistory.push({ role: 'assistant', content: fullText });
-  } catch {
-    updateChatMsg(typingId, 'Error de conexión. Intentá de nuevo.');
-  }
-
-  btn.disabled = false;
+    let full = '';
+    await callGroq(chatHistory, t => { full = t; updateChatMsg(tid, t); });
+    chatHistory.push({ role: 'assistant', content: full });
+    await registerUsage('chat');
+  } catch { updateChatMsg(tid, 'Error de conexion.'); }
+  document.getElementById('btnSend').disabled = false;
   scrollChat();
 }
 
 let msgCounter = 0;
-
 function addChatMsg(role, text, isTyping = false) {
   const id = 'msg-' + (++msgCounter);
-  const avatar = role === 'agent' ? '✦' : 'L';
-  const html = `
-    <div class="msg ${role}" id="${id}">
-      <div class="msg-avatar">${avatar}</div>
-      <div class="msg-bubble">${isTyping ? '<span class="typing">···</span>' : escapeHtml(text)}</div>
-    </div>`;
-  document.getElementById('chatMessages').insertAdjacentHTML('beforeend', html);
-  scrollChat();
-  return id;
+  const av = role === 'agent' ? '✦' : (currentUser?.user_metadata?.name?.[0]?.toUpperCase() || 'U');
+  document.getElementById('chatMessages').insertAdjacentHTML('beforeend',
+    `<div class="msg ${role}" id="${id}"><div class="msg-avatar">${av}</div><div class="msg-bubble">${isTyping ? '···' : escapeHtml(text)}</div></div>`);
+  scrollChat(); return id;
 }
-
-function updateChatMsg(id, text) {
-  const el = document.querySelector(`#${id} .msg-bubble`);
-  if (el) el.textContent = text;
-  scrollChat();
-}
-
-function scrollChat() {
-  const c = document.getElementById('chatMessages');
-  c.scrollTop = c.scrollHeight;
-}
-
-function escapeHtml(str) {
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
+function updateChatMsg(id, text) { const el = document.querySelector(`#${id} .msg-bubble`); if (el) el.textContent = text; scrollChat(); }
+function scrollChat() { const c = document.getElementById('chatMessages'); c.scrollTop = c.scrollHeight; }
+function escapeHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 // ============================
 // INIT
@@ -1732,7 +1880,7 @@ function escapeHtml(str) {
 window.addEventListener('DOMContentLoaded', () => {
   initTheme();
   initDate();
-  initDiary();
+  initDiaryInputs();
 });
 </script>
 </body>
