@@ -1,3 +1,4 @@
+/* version 3.0 */
 <!DOCTYPE html>
 <html lang="es" data-theme="dark">
 <head>
@@ -13,7 +14,7 @@
 :root {
   --transition-theme: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
-
+ 
 [data-theme="dark"] {
   --bg: #0e0e11;
   --surface: #16161a;
@@ -33,7 +34,7 @@
   --user-bubble: rgba(155,139,255,0.1);
   --user-border: rgba(155,139,255,0.2);
 }
-
+ 
 [data-theme="light"] {
   --bg: #f5f4f8;
   --surface: #ffffff;
@@ -53,14 +54,14 @@
   --user-bubble: rgba(108,85,232,0.07);
   --user-border: rgba(108,85,232,0.2);
 }
-
+ 
 /* ============================
    RESET & BASE
    ============================ */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
+ 
 html { font-size: 16px; }
-
+ 
 body {
   background: var(--bg);
   color: var(--text);
@@ -71,7 +72,7 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
-
+ 
 /* Background subtle mesh */
 body::before {
   content: '';
@@ -83,7 +84,7 @@ body::before {
   pointer-events: none;
   z-index: 0;
 }
-
+ 
 /* ============================
    LAYOUT
    ============================ */
@@ -95,7 +96,7 @@ body::before {
   padding: 0 16px 80px;
   min-height: 100vh;
 }
-
+ 
 /* ============================
    HEADER
    ============================ */
@@ -105,9 +106,9 @@ header {
   align-items: center;
   justify-content: space-between;
 }
-
+ 
 .header-left {}
-
+ 
 .app-name {
   font-family: 'Raleway', sans-serif;
   font-weight: 700;
@@ -116,7 +117,7 @@ header {
   color: var(--accent);
   text-transform: uppercase;
 }
-
+ 
 .app-sub {
   font-family: 'Space Mono', monospace;
   font-size: 0.62rem;
@@ -125,7 +126,7 @@ header {
   margin-top: 2px;
   text-transform: uppercase;
 }
-
+ 
 /* Theme toggle */
 .theme-toggle {
   display: flex;
@@ -133,7 +134,7 @@ header {
   gap: 8px;
   cursor: pointer;
 }
-
+ 
 .toggle-label {
   font-family: 'Space Mono', monospace;
   font-size: 0.62rem;
@@ -142,7 +143,7 @@ header {
   text-transform: uppercase;
   user-select: none;
 }
-
+ 
 .toggle-track {
   width: 40px;
   height: 22px;
@@ -153,12 +154,12 @@ header {
   transition: background 0.3s;
   cursor: pointer;
 }
-
+ 
 .toggle-track.on {
   background: var(--accent-dim);
   border-color: var(--accent);
 }
-
+ 
 .toggle-thumb {
   position: absolute;
   top: 3px; left: 3px;
@@ -167,12 +168,12 @@ header {
   border-radius: 50%;
   transition: transform 0.3s, background 0.3s;
 }
-
+ 
 .toggle-track.on .toggle-thumb {
   transform: translateX(18px);
   background: var(--accent);
 }
-
+ 
 /* Date */
 .date-row {
   display: flex;
@@ -180,7 +181,7 @@ header {
   gap: 8px;
   margin-bottom: 18px;
 }
-
+ 
 .date-pill {
   font-family: 'Space Mono', monospace;
   font-size: 0.65rem;
@@ -192,7 +193,7 @@ header {
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
-
+ 
 /* ============================
    TABS
    ============================ */
@@ -205,7 +206,7 @@ header {
   overflow: hidden;
   margin-bottom: 20px;
 }
-
+ 
 .tab {
   padding: 11px 4px;
   background: none;
@@ -222,37 +223,37 @@ header {
   text-transform: uppercase;
   line-height: 1.3;
 }
-
+ 
 .tab:last-child { border-right: none; }
-
+ 
 .tab .tab-icon {
   display: block;
   font-size: 0.95rem;
   margin-bottom: 2px;
 }
-
+ 
 .tab.active {
   background: var(--accent-dim);
   color: var(--accent);
   border-bottom: 2px solid var(--accent);
 }
-
+ 
 .tab:hover:not(.active) {
   background: var(--surface2);
   color: var(--text-soft);
 }
-
+ 
 /* ============================
    PANELS
    ============================ */
 .panel { display: none; animation: fadeUp 0.35s ease; }
 .panel.active { display: block; }
-
+ 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-
+ 
 /* ============================
    CARDS
    ============================ */
@@ -266,7 +267,7 @@ header {
   overflow: hidden;
   transition: var(--transition-theme);
 }
-
+ 
 .card-top-line {
   position: absolute;
   top: 0; left: 20%; right: 20%;
@@ -274,7 +275,7 @@ header {
   background: linear-gradient(90deg, transparent, var(--accent), transparent);
   opacity: 0.35;
 }
-
+ 
 .card-label {
   font-family: 'Raleway', sans-serif;
   font-weight: 600;
@@ -287,14 +288,14 @@ header {
   align-items: center;
   gap: 8px;
 }
-
+ 
 .card-label::after {
   content: '';
   flex: 1;
   height: 1px;
   background: var(--border);
 }
-
+ 
 /* ============================
    AFFIRMATION DISPLAY
    ============================ */
@@ -307,13 +308,13 @@ header {
   text-align: center;
   padding: 6px 4px;
 }
-
+ 
 .affirmation-hero em {
   color: var(--accent-light);
   font-style: italic;
   font-weight: 400;
 }
-
+ 
 .source-tags {
   display: flex;
   justify-content: center;
@@ -321,7 +322,7 @@ header {
   flex-wrap: wrap;
   margin-top: 14px;
 }
-
+ 
 .tag {
   font-family: 'Space Mono', monospace;
   font-size: 0.6rem;
@@ -333,13 +334,13 @@ header {
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
-
+ 
 .decrees-grid {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
-
+ 
 .decree-item {
   background: var(--surface2);
   border: 1px solid var(--border);
@@ -353,9 +354,9 @@ header {
   color: var(--text);
   transition: border-color 0.25s;
 }
-
+ 
 .decree-item:hover { border-color: var(--accent-light); }
-
+ 
 .decree-source {
   font-family: 'Space Mono', monospace;
   font-size: 0.58rem;
@@ -364,7 +365,7 @@ header {
   text-transform: uppercase;
   margin-top: 6px;
 }
-
+ 
 /* ============================
    PEIRCE PANEL
    ============================ */
@@ -374,7 +375,7 @@ header {
   gap: 10px;
   margin-bottom: 14px;
 }
-
+ 
 .quadrant {
   background: var(--surface2);
   border: 1px solid var(--border);
@@ -383,21 +384,21 @@ header {
   cursor: pointer;
   transition: all 0.25s;
 }
-
+ 
 .quadrant:hover, .quadrant.selected {
   border-color: var(--accent);
   background: var(--accent-dim);
 }
-
+ 
 .quadrant-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
 }
-
+ 
 .quadrant-header-left { flex: 1; }
-
+ 
 .q-chevron {
   font-family: 'Space Mono', monospace;
   font-size: 0.7rem;
@@ -406,12 +407,12 @@ header {
   margin-top: 2px;
   flex-shrink: 0;
 }
-
+ 
 .quadrant.selected .q-chevron {
   transform: rotate(180deg);
   color: var(--accent);
 }
-
+ 
 .q-num {
   font-family: 'Space Mono', monospace;
   font-size: 0.58rem;
@@ -420,7 +421,7 @@ header {
   text-transform: uppercase;
   margin-bottom: 4px;
 }
-
+ 
 .q-name {
   font-family: 'Raleway', sans-serif;
   font-weight: 600;
@@ -428,7 +429,7 @@ header {
   color: var(--text);
   margin-bottom: 4px;
 }
-
+ 
 .q-phrase {
   font-family: 'Space Mono', monospace;
   font-size: 0.6rem;
@@ -436,7 +437,7 @@ header {
   font-style: italic;
   line-height: 1.4;
 }
-
+ 
 .q-trap {
   font-size: 0.72rem;
   color: var(--gold);
@@ -444,7 +445,7 @@ header {
   font-weight: 400;
   line-height: 1.4;
 }
-
+ 
 /* ============================
    INPUTS
    ============================ */
@@ -464,16 +465,16 @@ textarea, input[type="text"] {
   transition: border-color 0.25s, background 0.25s;
   -webkit-appearance: none;
 }
-
+ 
 textarea::placeholder, input[type="text"]::placeholder {
   color: var(--text-muted);
 }
-
+ 
 textarea:focus, input[type="text"]:focus {
   border-color: var(--accent);
   background: var(--surface3);
 }
-
+ 
 /* ============================
    BUTTONS
    ============================ */
@@ -498,21 +499,21 @@ textarea:focus, input[type="text"]:focus {
   text-transform: uppercase;
   -webkit-tap-highlight-color: transparent;
 }
-
+ 
 .btn-primary:hover:not(:disabled) {
   background: var(--accent-glow);
   transform: translateY(-1px);
 }
-
+ 
 .btn-primary:active:not(:disabled) {
   transform: translateY(0);
 }
-
+ 
 .btn-primary:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
-
+ 
 .btn-secondary {
   display: flex;
   align-items: center;
@@ -530,9 +531,9 @@ textarea:focus, input[type="text"]:focus {
   transition: all 0.25s;
   -webkit-tap-highlight-color: transparent;
 }
-
+ 
 .btn-secondary:hover { border-color: var(--border-hover); color: var(--text); }
-
+ 
 /* ============================
    AI RESPONSE AREA
    ============================ */
@@ -545,9 +546,9 @@ textarea:focus, input[type="text"]:focus {
   display: none;
   animation: fadeUp 0.4s ease;
 }
-
+ 
 .response-area.visible { display: block; }
-
+ 
 .response-text {
   font-family: 'Poppins', sans-serif;
   font-size: 0.88rem;
@@ -556,7 +557,7 @@ textarea:focus, input[type="text"]:focus {
   color: var(--text);
   white-space: pre-wrap;
 }
-
+ 
 .response-label {
   font-family: 'Space Mono', monospace;
   font-size: 0.58rem;
@@ -568,7 +569,7 @@ textarea:focus, input[type="text"]:focus {
   align-items: center;
   gap: 6px;
 }
-
+ 
 .response-label::before {
   content: '';
   display: inline-block;
@@ -577,17 +578,17 @@ textarea:focus, input[type="text"]:focus {
   background: var(--accent);
   animation: pulse 1.5s ease infinite;
 }
-
+ 
 @keyframes pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.4; transform: scale(0.7); }
 }
-
+ 
 .response-label.done::before {
   animation: none;
   background: #5cb85c;
 }
-
+ 
 /* verse highlight */
 .verse-block {
   background: var(--gold-dim);
@@ -601,7 +602,7 @@ textarea:focus, input[type="text"]:focus {
   color: var(--text-soft);
   line-height: 1.5;
 }
-
+ 
 /* ============================
    LOADING DOTS
    ============================ */
@@ -611,22 +612,22 @@ textarea:focus, input[type="text"]:focus {
   padding: 8px 0;
   justify-content: center;
 }
-
+ 
 .loading-dots span {
   width: 6px; height: 6px;
   background: var(--accent);
   border-radius: 50%;
   animation: bounce 1.2s ease infinite;
 }
-
+ 
 .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
 .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
-
+ 
 @keyframes bounce {
   0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
   40% { transform: translateY(-6px); opacity: 1; }
 }
-
+ 
 /* ============================
    CHAT
    ============================ */
@@ -639,13 +640,13 @@ textarea:focus, input[type="text"]:focus {
   padding: 4px 0 12px;
   scroll-behavior: smooth;
 }
-
+ 
 .chat-messages::-webkit-scrollbar { width: 3px; }
 .chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
+ 
 .msg { display: flex; gap: 8px; animation: fadeUp 0.3s ease; }
 .msg.user { flex-direction: row-reverse; }
-
+ 
 .msg-avatar {
   width: 30px; height: 30px;
   border-radius: 50%;
@@ -657,7 +658,7 @@ textarea:focus, input[type="text"]:focus {
   flex-shrink: 0;
   font-family: 'Space Mono', monospace;
 }
-
+ 
 .msg-bubble {
   max-width: 80%;
   padding: 11px 15px;
@@ -665,7 +666,7 @@ textarea:focus, input[type="text"]:focus {
   font-size: 0.86rem;
   line-height: 1.65;
 }
-
+ 
 .msg.user .msg-bubble {
   background: var(--user-bubble);
   border: 1px solid var(--user-border);
@@ -673,7 +674,7 @@ textarea:focus, input[type="text"]:focus {
   font-family: 'Poppins', sans-serif;
   font-weight: 300;
 }
-
+ 
 .msg.agent .msg-bubble {
   background: var(--surface2);
   border: 1px solid var(--border);
@@ -681,14 +682,14 @@ textarea:focus, input[type="text"]:focus {
   font-family: 'Poppins', sans-serif;
   font-weight: 300;
 }
-
+ 
 .chat-input-row {
   display: flex;
   gap: 10px;
   align-items: flex-end;
   margin-top: 8px;
 }
-
+ 
 .chat-input-row textarea {
   min-height: 46px;
   max-height: 100px;
@@ -697,7 +698,7 @@ textarea:focus, input[type="text"]:focus {
   flex: 1;
   font-size: 0.86rem;
 }
-
+ 
 .btn-send {
   width: 44px; height: 44px;
   border-radius: 50%;
@@ -711,10 +712,10 @@ textarea:focus, input[type="text"]:focus {
   flex-shrink: 0;
   -webkit-tap-highlight-color: transparent;
 }
-
+ 
 .btn-send:hover:not(:disabled) { background: var(--accent-glow); transform: scale(1.07); }
 .btn-send:disabled { opacity: 0.35; cursor: not-allowed; }
-
+ 
 /* ============================
    DIARY
    ============================ */
@@ -723,13 +724,13 @@ textarea:focus, input[type="text"]:focus {
   flex-direction: column;
   gap: 8px;
 }
-
+ 
 .gratitude-row {
   display: flex;
   align-items: center;
   gap: 10px;
 }
-
+ 
 .gratitude-num {
   font-family: 'Space Mono', monospace;
   font-size: 0.72rem;
@@ -737,14 +738,14 @@ textarea:focus, input[type="text"]:focus {
   min-width: 18px;
   text-align: right;
 }
-
+ 
 .gratitude-row input {
   border-radius: 8px;
   padding: 10px 14px;
   font-size: 0.85rem;
   min-height: unset;
 }
-
+ 
 .diary-entries {
   display: flex;
   flex-direction: column;
@@ -753,17 +754,17 @@ textarea:focus, input[type="text"]:focus {
   overflow-y: auto;
   padding-right: 2px;
 }
-
+ 
 .diary-entries::-webkit-scrollbar { width: 3px; }
 .diary-entries::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
+ 
 .diary-entry {
   background: var(--surface2);
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 14px;
 }
-
+ 
 .diary-entry-date {
   font-family: 'Space Mono', monospace;
   font-size: 0.6rem;
@@ -772,14 +773,14 @@ textarea:focus, input[type="text"]:focus {
   text-transform: uppercase;
   margin-bottom: 6px;
 }
-
+ 
 .diary-entry-gratitudes {
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
   margin-bottom: 8px;
 }
-
+ 
 .diary-entry-gratitudes .gtag {
   font-size: 0.72rem;
   background: var(--accent-dim);
@@ -789,7 +790,7 @@ textarea:focus, input[type="text"]:focus {
   color: var(--accent);
   font-family: 'Poppins', sans-serif;
 }
-
+ 
 .diary-entry-text {
   font-family: 'Poppins', sans-serif;
   font-size: 0.84rem;
@@ -797,7 +798,7 @@ textarea:focus, input[type="text"]:focus {
   line-height: 1.55;
   color: var(--text-soft);
 }
-
+ 
 .empty-state {
   text-align: center;
   padding: 24px;
@@ -807,7 +808,7 @@ textarea:focus, input[type="text"]:focus {
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
-
+ 
 /* ============================
    DIVIDER
    ============================ */
@@ -816,7 +817,7 @@ textarea:focus, input[type="text"]:focus {
   background: linear-gradient(90deg, transparent, var(--border), transparent);
   margin: 16px 0;
 }
-
+ 
 /* ============================
    PEIRCE — Cuadrante detalle expandible
    ============================ */
@@ -827,9 +828,9 @@ textarea:focus, input[type="text"]:focus {
   border-top: 1px solid var(--border);
   animation: fadeUp 0.3s ease;
 }
-
+ 
 .quadrant.selected .q-detail { display: block; }
-
+ 
 .q-detail-desc {
   font-family: 'Poppins', sans-serif;
   font-size: 0.8rem;
@@ -838,7 +839,7 @@ textarea:focus, input[type="text"]:focus {
   color: var(--text-soft);
   margin-bottom: 10px;
 }
-
+ 
 .q-example-label {
   font-family: 'Space Mono', monospace;
   font-size: 0.58rem;
@@ -847,7 +848,7 @@ textarea:focus, input[type="text"]:focus {
   text-transform: uppercase;
   margin-bottom: 6px;
 }
-
+ 
 .q-example {
   background: var(--surface3);
   border-left: 2px solid var(--accent);
@@ -855,7 +856,7 @@ textarea:focus, input[type="text"]:focus {
   padding: 10px 12px;
   margin-bottom: 8px;
 }
-
+ 
 .q-example-title {
   font-family: 'Raleway', sans-serif;
   font-weight: 600;
@@ -863,7 +864,7 @@ textarea:focus, input[type="text"]:focus {
   color: var(--text);
   margin-bottom: 3px;
 }
-
+ 
 .q-example-text {
   font-family: 'Poppins', sans-serif;
   font-size: 0.75rem;
@@ -871,7 +872,7 @@ textarea:focus, input[type="text"]:focus {
   line-height: 1.5;
   color: var(--text-muted);
 }
-
+ 
 .q-ado {
   background: rgba(240,192,96,0.06);
   border: 1px solid rgba(240,192,96,0.2);
@@ -879,7 +880,7 @@ textarea:focus, input[type="text"]:focus {
   padding: 9px 12px;
   margin-top: 8px;
 }
-
+ 
 .q-ado-label {
   font-family: 'Space Mono', monospace;
   font-size: 0.56rem;
@@ -888,7 +889,7 @@ textarea:focus, input[type="text"]:focus {
   text-transform: uppercase;
   margin-bottom: 4px;
 }
-
+ 
 .q-ado-text {
   font-family: 'Poppins', sans-serif;
   font-size: 0.76rem;
@@ -896,7 +897,7 @@ textarea:focus, input[type="text"]:focus {
   color: var(--gold);
   line-height: 1.5;
 }
-
+ 
 .q-tibetan {
   font-family: 'Space Mono', monospace;
   font-size: 0.62rem;
@@ -904,11 +905,11 @@ textarea:focus, input[type="text"]:focus {
   margin-top: 8px;
   letter-spacing: 0.06em;
 }
-
+ 
 .q-tibetan span {
   color: var(--accent);
 }
-
+ 
 /* ============================
    PEIRCE — Steps list
    ============================ */
@@ -917,7 +918,7 @@ textarea:focus, input[type="text"]:focus {
   flex-direction: column;
   gap: 8px;
 }
-
+ 
 .step-item {
   background: var(--surface2);
   border: 1px solid var(--border);
@@ -929,9 +930,9 @@ textarea:focus, input[type="text"]:focus {
   cursor: pointer;
   transition: border-color 0.2s;
 }
-
+ 
 .step-item:hover { border-color: var(--accent); }
-
+ 
 .step-num {
   font-family: 'Space Mono', monospace;
   font-size: 0.65rem;
@@ -939,9 +940,9 @@ textarea:focus, input[type="text"]:focus {
   min-width: 22px;
   padding-top: 1px;
 }
-
+ 
 .step-content {}
-
+ 
 .step-title {
   font-family: 'Raleway', sans-serif;
   font-weight: 600;
@@ -949,7 +950,7 @@ textarea:focus, input[type="text"]:focus {
   color: var(--text);
   margin-bottom: 3px;
 }
-
+ 
 .step-desc {
   font-family: 'Poppins', sans-serif;
   font-size: 0.78rem;
@@ -957,7 +958,7 @@ textarea:focus, input[type="text"]:focus {
   line-height: 1.5;
   color: var(--text-muted);
 }
-
+ 
 /* ============================
    RESPONSIVE (just in case bigger screens)
    ============================ */
@@ -967,14 +968,14 @@ textarea:focus, input[type="text"]:focus {
   .app-name { font-size: 1.25rem; }
   .card { padding: 24px; }
 }
-
+ 
 @media (max-width: 360px) {
   .tab { font-size: 0.55rem; padding: 9px 2px; }
   .tab .tab-icon { font-size: 0.85rem; }
   .app { padding: 0 12px 80px; }
   .card { padding: 16px; }
 }
-
+ 
 /* AUTH SCREEN */
 #authScreen {
   position: fixed; inset: 0; background: var(--bg); z-index: 100;
@@ -1008,7 +1009,7 @@ textarea:focus, input[type="text"]:focus {
 .auth-divider span { font-family: 'Space Mono', monospace; font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
 .btn-google { width: 100%; padding: 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; color: var(--text-soft); font-family: 'Poppins', sans-serif; font-size: 0.82rem; cursor: pointer; transition: all 0.25s; display: flex; align-items: center; justify-content: center; gap: 10px; }
 .btn-google:hover { border-color: var(--border-hover); color: var(--text); }
-
+ 
 /* USER BAR */
 .user-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
 .plan-badge { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; border: 1px solid; }
@@ -1021,7 +1022,7 @@ textarea:focus, input[type="text"]:focus {
 .quota-chip.ok { color: var(--accent); border-color: var(--accent); }
 .btn-logout { font-family: 'Space Mono', monospace; font-size: 0.58rem; color: var(--text-muted); background: none; border: 1px solid var(--border); border-radius: 20px; padding: 3px 10px; cursor: pointer; letter-spacing: 0.06em; text-transform: uppercase; transition: all 0.2s; margin-left: auto; }
 .btn-logout:hover { color: var(--text); border-color: var(--border-hover); }
-
+ 
 /* LIMIT MODAL */
 #limitModal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; display: none; align-items: center; justify-content: center; padding: 24px; backdrop-filter: blur(4px); }
 #limitModal.visible { display: flex; }
@@ -1039,7 +1040,7 @@ textarea:focus, input[type="text"]:focus {
 </style>
 </head>
 <body>
-
+ 
 <!-- AUTH SCREEN -->
 <div id="authScreen">
   <div class="auth-box">
@@ -1075,7 +1076,7 @@ textarea:focus, input[type="text"]:focus {
     <div class="auth-error" id="authError"></div>
   </div>
 </div>
-
+ 
 <!-- LIMIT MODAL -->
 <div id="limitModal">
   <div class="limit-box">
@@ -1099,9 +1100,9 @@ textarea:focus, input[type="text"]:focus {
     <button class="btn-close-modal" onclick="closeLimitModal()">Entendido</button>
   </div>
 </div>
-
+ 
 <div class="app">
-
+ 
   <!-- HEADER -->
   <header>
     <div class="header-left">
@@ -1115,17 +1116,17 @@ textarea:focus, input[type="text"]:focus {
       </div>
     </div>
   </header>
-
+ 
   <div class="date-row">
     <span class="date-pill" id="dateBadge"></span>
   </div>
-
+ 
   <div class="user-bar" id="userBar" style="display:none;">
     <span class="plan-badge free" id="planBadge">Free</span>
     <div class="quota-bar" id="quotaBar"></div>
     <button class="btn-logout" onclick="doLogout()">Salir</button>
   </div>
-
+ 
   <!-- TABS -->
   <div class="tabs">
     <button class="tab active" onclick="switchTab('afirmar')">
@@ -1144,7 +1145,7 @@ textarea:focus, input[type="text"]:focus {
       <span class="tab-icon">◎</span>Chat
     </button>
   </div>
-
+ 
   <!-- ========================
        PANEL: AFIRMAR
        ======================== -->
@@ -1161,7 +1162,7 @@ textarea:focus, input[type="text"]:focus {
         <span class="tag">Presente</span>
       </div>
     </div>
-
+ 
     <div class="card">
       <div class="card-top-line"></div>
       <div class="card-label">Mis decretos de hoy</div>
@@ -1188,7 +1189,7 @@ textarea:focus, input[type="text"]:focus {
       </div>
     </div>
   </div>
-
+ 
   <!-- ========================
        PANEL: DESAFÍO
        ======================== -->
@@ -1206,7 +1207,7 @@ textarea:focus, input[type="text"]:focus {
       </div>
     </div>
   </div>
-
+ 
   <!-- ========================
        PANEL: PEIRCE
        ======================== -->
@@ -1215,9 +1216,9 @@ textarea:focus, input[type="text"]:focus {
       <div class="card-top-line"></div>
       <div class="card-label">El Diagrama — seleccioná tu cuadrante</div>
       <p style="font-family:'Poppins',sans-serif;font-size:0.78rem;font-weight:300;color:var(--text-muted);margin-bottom:12px;line-height:1.55;">Tocá cada cuadrante para ver su explicación y ejemplos. Identificá en cuál estás operando hoy.</p>
-
+ 
       <div class="quadrants-list">
-
+ 
       <!-- CUADRANTE 1 -->
       <div class="quadrant" id="q1" onclick="selectQuadrant(1)">
         <div class="quadrant-header">
@@ -1254,7 +1255,7 @@ textarea:focus, input[type="text"]:focus {
           <div class="q-tibetan">Escuela Vihara: <span>Doed-i</span> — "Acepto tu argumento"</div>
         </div>
       </div>
-
+ 
       <!-- CUADRANTE 2 -->
       <div class="quadrant" id="q2" onclick="selectQuadrant(2)">
         <div class="quadrant-header">
@@ -1291,7 +1292,7 @@ textarea:focus, input[type="text"]:focus {
           <div class="q-tibetan">Escuela Vihara: <span>Tagmadrubi</span> — "No acepto tu argumento"</div>
         </div>
       </div>
-
+ 
       <!-- CUADRANTE 3 -->
       <div class="quadrant" id="q3" onclick="selectQuadrant(3)">
         <div class="quadrant-header">
@@ -1328,7 +1329,7 @@ textarea:focus, input[type="text"]:focus {
           <div class="q-tibetan">Escuela Vihara: <span>Majiab</span> — "No necesariamente"</div>
         </div>
       </div>
-
+ 
       <!-- CUADRANTE 4 -->
       <div class="quadrant" id="q4" onclick="selectQuadrant(4)">
         <div class="quadrant-header">
@@ -1366,7 +1367,7 @@ textarea:focus, input[type="text"]:focus {
         </div>
       </div>
       </div><!-- end quadrants-list -->
-
+ 
       <textarea id="peirceInput" rows="3" placeholder="Describí tu situación actual. ¿En qué cuadrante te reconocés hoy?"></textarea>
       <button class="btn-primary" onclick="processPeirce()" id="btnPeirce">
         <span>◈</span> Diagnóstico semiótico con IA
@@ -1376,7 +1377,7 @@ textarea:focus, input[type="text"]:focus {
         <div class="response-text" id="peirceText"></div>
       </div>
     </div>
-
+ 
     <div class="card">
       <div class="card-top-line"></div>
       <div class="card-label">Los 3 Tiempos Lógicos</div>
@@ -1405,7 +1406,7 @@ textarea:focus, input[type="text"]:focus {
       </div>
     </div>
   </div>
-
+ 
   <!-- ========================
        PANEL: DIARIO
        ======================== -->
@@ -1417,7 +1418,7 @@ textarea:focus, input[type="text"]:focus {
         <!-- 3 inputs generados por JS -->
       </div>
     </div>
-
+ 
     <div class="card">
       <div class="card-top-line"></div>
       <div class="card-label">Reflexión del día</div>
@@ -1426,7 +1427,7 @@ textarea:focus, input[type="text"]:focus {
         <span>◎</span> Guardar en mi diario
       </button>
     </div>
-
+ 
     <div class="card">
       <div class="card-top-line"></div>
       <div class="card-label">Entradas anteriores</div>
@@ -1435,7 +1436,7 @@ textarea:focus, input[type="text"]:focus {
       </div>
     </div>
   </div>
-
+ 
   <!-- ========================
        PANEL: CHAT
        ======================== -->
@@ -1457,9 +1458,9 @@ textarea:focus, input[type="text"]:focus {
       </div>
     </div>
   </div>
-
+ 
 </div><!-- end .app -->
-
+ 
 <script>
 // ============================
 // SUPABASE CONFIG
@@ -1468,13 +1469,13 @@ textarea:focus, input[type="text"]:focus {
 const SUPABASE_URL = 'https://mmtgudgbwtswmajchodc.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1tdGd1ZGdid3Rzd21hamNob2RjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0MjE4ODUsImV4cCI6MjA4ODk5Nzg4NX0.6oCgtwSTFaydLdS6Sx8Tlc3qrn-bdXQ4NTYF_SmDMuo';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
+ 
 // ============================
 // GROQ CONFIG
 // ============================
 const GROQ_KEY = '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';
 const MODEL = 'llama-3.3-70b-versatile';
-
+ 
 // ============================
 // PLANES Y LIMITES DIARIOS
 // ============================
@@ -1483,16 +1484,16 @@ const PLANES = {
   pro:     { chat: 20, decreto: 5, desafio: 5, peirce: 5 },
   premium: { chat: 999, decreto: 999, desafio: 999, peirce: 999 }
 };
-
+ 
 let currentUser = null;
 let currentPlan = 'free';
 let todayUsage = { chat: 0, decreto: 0, desafio: 0, peirce: 0 };
 let chatHistory = [];
-
+ 
 const SYSTEM_PROMPT = `Sos el Agente de Fe — un guia espiritual personal que integra tres marcos:
-
+ 
 1. LAIN GARCIA CALVO: Fe activa como tecnologia espiritual. La fe no es espera pasiva, es accion desde la certeza de que ya se posee lo que se desea. El creer genera el ver, no al reves. La gratitud como estado base.
-
+ 
 2. JOSE LUIS PARISE — LOS ONCE PASOS DE LA MAGIA:
 - El Universo cumple exactamente lo que ordenas con tu PALABRA, no con tu intencion ni imagen.
 - "Quiero adelgazar" ordena engordar. "Voy a buscar trabajo" ordena no encontrarlo. La Palabra manda.
@@ -1502,20 +1503,20 @@ const SYSTEM_PROMPT = `Sos el Agente de Fe — un guia espiritual personal que i
 - El Mago no pregunta COMO, solo ordena QUE. El Universo encuentra el Como.
 - Arranque Bifasico: cambio de posicion interna para dejar atras lo que frena.
 - El Combate es la unica opcion valida: seguir avanzando sin negociar lo innegociable.
-
+ 
 3. DIAGRAMA DE PEIRCE (Parise):
 - 4 cuadrantes: Lo Posible, Lo Imposible, Lo Necesario, Lo Contingente.
 - Cada cuadrante tiene su trampa: Esfinges, FDD, beneficio secundario, "a veces si a veces no".
 - Tiempo lineal (pretexto) vs tiempo circular (texto). La resolucion es siempre en tiempo circular.
 - 3 tiempos logicos: Instante para ver → Tiempo para comprender → Momento para concluir.
-
+ 
 REGLAS DE ORO:
 - Afirmaciones que favorecen: SIEMPRE en presente: "yo ahora soy...", "yo ahora tengo..."
 - Lo que se dejo atras: en PASADO: "yo antes era...", "yo me comportaba de..."
 - NUNCA en futuro.
-
+ 
 ESTILO: Habla de vos (rioplatense). Directo, profundo, sin listas largas. Podes citar versiculos biblicos. Nunca seas condescendiente.`;
-
+ 
 // ============================
 // AUTH SCREEN
 // ============================
@@ -1526,15 +1527,15 @@ function showAuthTab(tab) {
   document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
   document.getElementById('authError').textContent = '';
 }
-
+ 
 function setAuthError(msg) { document.getElementById('authError').textContent = msg; }
-
+ 
 function setAuthLoading(btnId, loading) {
   const btn = document.getElementById(btnId);
   btn.disabled = loading;
   btn.textContent = loading ? 'Procesando...' : (btnId === 'btnLogin' ? 'Ingresar' : 'Crear cuenta');
 }
-
+ 
 async function doLogin() {
   const email = document.getElementById('loginEmail').value.trim();
   const pass = document.getElementById('loginPassword').value;
@@ -1544,7 +1545,7 @@ async function doLogin() {
   setAuthLoading('btnLogin', false);
   if (error) setAuthError(translateAuthError(error.message));
 }
-
+ 
 async function doRegister() {
   const name = document.getElementById('regName').value.trim();
   const email = document.getElementById('regEmail').value.trim();
@@ -1560,12 +1561,12 @@ async function doRegister() {
   }
   setAuthError('Cuenta creada. Verifica tu email si se requiere confirmacion.');
 }
-
+ 
 async function doGoogleLogin() {
   const { error } = await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.href } });
   if (error) setAuthError(translateAuthError(error.message));
 }
-
+ 
 async function doLogout() {
   await sb.auth.signOut();
   currentUser = null; currentPlan = 'free';
@@ -1573,14 +1574,14 @@ async function doLogout() {
   document.getElementById('authScreen').classList.remove('hidden');
   document.getElementById('userBar').style.display = 'none';
 }
-
+ 
 function translateAuthError(msg) {
   if (msg.includes('Invalid login')) return 'Email o contrasena incorrectos.';
   if (msg.includes('Email not confirmed')) return 'Confirma tu email antes de ingresar.';
   if (msg.includes('already registered')) return 'Ese email ya esta registrado.';
   return msg;
 }
-
+ 
 // ============================
 // SESSION
 // ============================
@@ -1597,7 +1598,7 @@ sb.auth.onAuthStateChange(async (event, session) => {
     document.getElementById('userBar').style.display = 'none';
   }
 });
-
+ 
 async function loadUserProfile() {
   const { data } = await sb.from('usuarios').select('plan, name').eq('id', currentUser.id).single();
   if (data) { currentPlan = data.plan || 'free'; }
@@ -1607,7 +1608,7 @@ async function loadUserProfile() {
     currentPlan = 'free';
   }
 }
-
+ 
 async function loadTodayUsage() {
   const today = new Date().toISOString().split('T')[0];
   const { data } = await sb.from('consultas').select('tipo').eq('user_id', currentUser.id)
@@ -1615,21 +1616,21 @@ async function loadTodayUsage() {
   todayUsage = { chat: 0, decreto: 0, desafio: 0, peirce: 0 };
   if (data) data.forEach(r => { if (todayUsage[r.tipo] !== undefined) todayUsage[r.tipo]++; });
 }
-
+ 
 async function registerUsage(tipo) {
   if (!currentUser) return;
   await sb.from('consultas').insert({ user_id: currentUser.id, tipo, created_at: new Date().toISOString() });
   todayUsage[tipo] = (todayUsage[tipo] || 0) + 1;
   updateUserBar();
 }
-
+ 
 function canUse(tipo) {
   return todayUsage[tipo] < (PLANES[currentPlan]?.[tipo] ?? 1);
 }
-
+ 
 function showLimitModal() { document.getElementById('limitModal').classList.add('visible'); }
 function closeLimitModal() { document.getElementById('limitModal').classList.remove('visible'); }
-
+ 
 // ============================
 // USER BAR UI
 // ============================
@@ -1648,7 +1649,7 @@ function updateUserBar() {
     return `<span class="quota-chip ${cls}">${icon} ${inf ? '∞' : rest}</span>`;
   }).join('');
 }
-
+ 
 // ============================
 // THEME
 // ============================
@@ -1657,21 +1658,21 @@ function initTheme() {
   document.documentElement.setAttribute('data-theme', saved);
   updateToggleUI(saved);
 }
-
+ 
 function toggleTheme() {
   const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('fe_theme', next);
   updateToggleUI(next);
 }
-
+ 
 function updateToggleUI(theme) {
   const track = document.getElementById('toggleTrack');
   const label = document.getElementById('themeLabel');
   track.classList.toggle('on', theme === 'light');
   label.textContent = theme === 'light' ? '☾' : '☀';
 }
-
+ 
 // ============================
 // DATE
 // ============================
@@ -1681,7 +1682,7 @@ function initDate() {
   const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
   document.getElementById('dateBadge').textContent = `${days[now.getDay()]} ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
 }
-
+ 
 // ============================
 // TABS
 // ============================
@@ -1692,7 +1693,7 @@ function switchTab(name) {
   const idx = ['afirmar','desafio','peirce','diario','chat'].indexOf(name);
   if (idx >= 0) document.querySelectorAll('.tab')[idx].classList.add('active');
 }
-
+ 
 // ============================
 // GROQ
 // ============================
@@ -1714,7 +1715,7 @@ async function callGroq(messages, onChunk) {
   }
   return full;
 }
-
+ 
 // ============================
 // AFIRMAR
 // ============================
@@ -1734,7 +1735,7 @@ async function generateDecrees() {
   } catch { textEl.textContent = 'Error de conexion.'; }
   btn.disabled = false; btn.innerHTML = '<span>⟳</span> Generar nuevos decretos con IA';
 }
-
+ 
 // ============================
 // DESAFIO
 // ============================
@@ -1750,29 +1751,29 @@ async function processChallenge() {
   resp.classList.add('visible'); labelEl.className = 'response-label'; labelEl.textContent = 'Agente procesando'; textEl.textContent = '';
   try {
     await callGroq([{ role: 'user', content: `Este es mi desafio: "${input}"
-
+ 
 1. Que Palabra estoy usando (Parise)? Que le ordeno al Universo sin darme cuenta?
 2. En que cuadrante de Peirce estoy? Cual es mi trampa?
 3. Que accion de fe sugiere Lain?
-
+ 
 Termina con UNA declaracion en tiempo presente.` }], t => textEl.textContent = t);
     labelEl.className = 'response-label done'; labelEl.textContent = 'Guia recibida';
     await registerUsage('desafio');
   } catch { textEl.textContent = 'Error de conexion.'; }
   btn.disabled = false; btn.innerHTML = '<span>✦</span> Recibir guia espiritual y semiotica';
 }
-
+ 
 // ============================
 // PEIRCE
 // ============================
 let selectedQuadrant = null;
-
+ 
 function selectQuadrant(n) {
   document.querySelectorAll('.quadrant').forEach(q => q.classList.remove('selected'));
   document.getElementById('q' + n).classList.add('selected');
   selectedQuadrant = n;
 }
-
+ 
 async function processPeirce() {
   if (!canUse('peirce')) { showLimitModal(); return; }
   const input = document.getElementById('peirceInput').value.trim();
@@ -1787,14 +1788,14 @@ async function processPeirce() {
   resp.classList.add('visible'); labelEl.className = 'response-label'; labelEl.textContent = 'Agente procesando'; textEl.textContent = '';
   try {
     await callGroq([{ role: 'user', content: `Mi situacion${qInfo}: "${input}"
-
+ 
 Diagnostico peirceano: cuadrante real, trampa del yo, tiempo lineal o circular, ADO en la Zona de Emergencia, movimiento correcto. Integra la Palabra que ordeno segun Parise. Termina con una declaracion en tiempo PRESENTE.` }], t => textEl.textContent = t);
     labelEl.className = 'response-label done'; labelEl.textContent = 'Diagnostico completo';
     await registerUsage('peirce');
   } catch { textEl.textContent = 'Error de conexion.'; }
   btn.disabled = false; btn.innerHTML = '<span>◈</span> Diagnostico semiotico con IA';
 }
-
+ 
 // ============================
 // DIARIO
 // ============================
@@ -1802,7 +1803,7 @@ function initDiaryInputs() {
   const c = document.getElementById('gratitudeInputs');
   c.innerHTML = [1,2,3].map(i => `<div class="gratitude-row"><span class="gratitude-num">${i}</span><input type="text" id="grat${i}" placeholder="Hoy agradezco..."></div>`).join('');
 }
-
+ 
 async function saveDiary() {
   const g = [1,2,3].map(i => document.getElementById('grat'+i).value.trim()).filter(Boolean);
   const text = document.getElementById('diaryText').value.trim();
@@ -1820,7 +1821,7 @@ async function saveDiary() {
   await renderDiaryEntries();
   alert('✦ Guardado en tu diario.');
 }
-
+ 
 async function renderDiaryEntries() {
   const c = document.getElementById('diaryEntries');
   if (currentUser) {
@@ -1837,12 +1838,12 @@ async function renderDiaryEntries() {
     c.innerHTML = entries.map(e => `<div class="diary-entry"><div class="diary-entry-date">${e.date}</div>${e.gratitudes?.length ? `<div class="diary-entry-gratitudes">${e.gratitudes.map(g=>`<span class="gtag">✦ ${g}</span>`).join('')}</div>` : ''}${e.text ? `<div class="diary-entry-text">${e.text}</div>` : ''}</div>`).join('');
   }
 }
-
+ 
 // ============================
 // CHAT
 // ============================
 function chatKeydown(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); } }
-
+ 
 async function sendChat() {
   if (!canUse('chat')) { showLimitModal(); return; }
   const input = document.getElementById('chatInput');
@@ -1861,7 +1862,7 @@ async function sendChat() {
   document.getElementById('btnSend').disabled = false;
   scrollChat();
 }
-
+ 
 let msgCounter = 0;
 function addChatMsg(role, text, isTyping = false) {
   const id = 'msg-' + (++msgCounter);
@@ -1873,7 +1874,7 @@ function addChatMsg(role, text, isTyping = false) {
 function updateChatMsg(id, text) { const el = document.querySelector(`#${id} .msg-bubble`); if (el) el.textContent = text; scrollChat(); }
 function scrollChat() { const c = document.getElementById('chatMessages'); c.scrollTop = c.scrollHeight; }
 function escapeHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
+ 
 // ============================
 // INIT
 // ============================
@@ -1883,5 +1884,7 @@ window.addEventListener('DOMContentLoaded', () => {
   initDiaryInputs();
 });
 </script>
+</body>
+</html>
 </body>
 </html>
