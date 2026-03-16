@@ -1036,6 +1036,19 @@ textarea:focus, input[type="text"]:focus {
 .limit-plan-price { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--accent); }
 .btn-close-modal { font-family: 'Poppins', sans-serif; font-size: 0.78rem; color: var(--text-muted); background: none; border: 1px solid var(--border); border-radius: 8px; padding: 8px 20px; cursor: pointer; transition: all 0.2s; }
 .btn-close-modal:hover { color: var(--text); }
+ 
+/* HISTORIAL */
+.historial-list {
+  display: flex; flex-direction: column; gap: 10px;
+  max-height: 320px; overflow-y: auto; padding-right: 2px;
+}
+.historial-list::-webkit-scrollbar { width: 3px; }
+.historial-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.historial-item { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+.historial-date { font-family: 'Space Mono', monospace; font-size: 0.58rem; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+.historial-pregunta { font-family: 'Poppins', sans-serif; font-size: 0.82rem; font-weight: 500; color: var(--accent); margin-bottom: 6px; line-height: 1.4; }
+.historial-respuesta { font-family: 'Poppins', sans-serif; font-size: 0.78rem; font-weight: 300; color: var(--text-soft); line-height: 1.55; max-height: 100px; overflow: hidden; position: relative; }
+.historial-respuesta::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 28px; background: linear-gradient(transparent, var(--surface2)); }
 </style>
 </head>
 <body>
@@ -1195,6 +1208,14 @@ textarea:focus, input[type="text"]:focus {
       <div class="response-area" id="challengeResponse">
         <div class="response-label" id="challengeLabel">Agente procesando</div>
         <div class="response-text" id="challengeText"></div>
+      </div>
+    </div>
+ 
+    <div class="card">
+      <div class="card-top-line"></div>
+      <div class="card-label">Consultas anteriores</div>
+      <div class="historial-list" id="historialDesafio">
+        <div class="empty-state">Sin consultas anteriores.</div>
       </div>
     </div>
   </div>
@@ -1371,6 +1392,14 @@ textarea:focus, input[type="text"]:focus {
  
     <div class="card">
       <div class="card-top-line"></div>
+      <div class="card-label">Diagnósticos anteriores</div>
+      <div class="historial-list" id="historialPeirce">
+        <div class="empty-state">Sin diagnósticos anteriores.</div>
+      </div>
+    </div>
+ 
+    <div class="card">
+      <div class="card-top-line"></div>
       <div class="card-label">Los 3 Tiempos Lógicos</div>
       <div class="steps-list">
         <div class="step-item">
@@ -1446,6 +1475,14 @@ textarea:focus, input[type="text"]:focus {
       <div class="chat-input-row">
         <textarea id="chatInput" rows="1" placeholder="Escribí tu pregunta o situación..." onkeydown="chatKeydown(event)"></textarea>
         <button class="btn-send" id="btnSend" onclick="sendChat()">→</button>
+      </div>
+    </div>
+ 
+    <div class="card" style="padding:16px;">
+      <div class="card-top-line"></div>
+      <div class="card-label">Conversaciones anteriores</div>
+      <div class="historial-list" id="historialChat">
+        <div class="empty-state">Sin conversaciones anteriores.</div>
       </div>
     </div>
   </div>
@@ -1584,6 +1621,9 @@ sb.auth.onAuthStateChange(async (event, session) => {
     document.getElementById('authScreen').classList.add('hidden');
     updateUserBar();
     await renderDiaryEntries();
+    loadHistorial('desafio', 'historialDesafio');
+    loadHistorial('peirce', 'historialPeirce');
+    loadHistorial('chat', 'historialChat');
     loadOrGenerateDailyDecrees();
   } else {
     document.getElementById('authScreen').classList.remove('hidden');
@@ -1609,11 +1649,41 @@ async function loadTodayUsage() {
   if (data) data.forEach(r => { if (todayUsage[r.tipo] !== undefined) todayUsage[r.tipo]++; });
 }
  
-async function registerUsage(tipo) {
+async function registerUsage(tipo, pregunta = '', respuesta = '') {
   if (!currentUser) return;
-  await sb.from('consultas').insert({ user_id: currentUser.id, tipo, created_at: new Date().toISOString() });
+  await sb.from('consultas').insert({
+    user_id: currentUser.id,
+    tipo,
+    pregunta: pregunta.slice(0, 2000),
+    respuesta: respuesta.slice(0, 4000),
+    created_at: new Date().toISOString()
+  });
   todayUsage[tipo] = (todayUsage[tipo] || 0) + 1;
   updateUserBar();
+}
+ 
+async function loadHistorial(tipo, containerId) {
+  if (!currentUser) return;
+  const c = document.getElementById(containerId);
+  if (!c) return;
+  c.innerHTML = '<div class="empty-state">Cargando...</div>';
+  const { data } = await sb.from('consultas')
+    .select('pregunta, respuesta, created_at')
+    .eq('user_id', currentUser.id)
+    .eq('tipo', tipo)
+    .not('pregunta', 'is', null)
+    .order('created_at', { ascending: false })
+    .limit(30);
+  if (!data?.length) { c.innerHTML = '<div class="empty-state">Sin consultas anteriores.</div>'; return; }
+  c.innerHTML = data.map(e => {
+    const d = new Date(e.created_at).toLocaleDateString('es-AR', { day:'numeric', month:'short', year:'numeric' });
+    const t = new Date(e.created_at).toLocaleTimeString('es-AR', { hour:'2-digit', minute:'2-digit' });
+    return `<div class="historial-item">
+      <div class="historial-date">${d} · ${t}</div>
+      <div class="historial-pregunta">❯ ${escapeHtml(e.pregunta || '')}</div>
+      ${e.respuesta ? `<div class="historial-respuesta">${escapeHtml(e.respuesta)}</div>` : ''}
+    </div>`;
+  }).join('');
 }
  
 function canUse(tipo) {
@@ -1843,15 +1913,17 @@ async function processChallenge() {
   btn.disabled = true; btn.innerHTML = '<span>...</span> Procesando';
   resp.classList.add('visible'); labelEl.className = 'response-label'; labelEl.textContent = 'Agente procesando'; textEl.textContent = '';
   try {
+    let fullResp = '';
     await callGroq([{ role: 'user', content: `Este es mi desafio: "${input}"
  
 1. Que Palabra estoy usando (Parise)? Que le ordeno al Universo sin darme cuenta?
 2. En que cuadrante de Peirce estoy? Cual es mi trampa?
 3. Que accion de fe sugiere Lain?
  
-Termina con UNA declaracion en tiempo presente.` }], t => textEl.textContent = t);
+Termina con UNA declaracion en tiempo presente.` }], t => { fullResp = t; textEl.textContent = t; });
     labelEl.className = 'response-label done'; labelEl.textContent = 'Guia recibida';
-    await registerUsage('desafio');
+    await registerUsage('desafio', input, fullResp);
+    await loadHistorial('desafio', 'historialDesafio');
   } catch { textEl.textContent = 'Error de conexion.'; }
   btn.disabled = false; btn.innerHTML = '<span>✦</span> Recibir guia espiritual y semiotica';
 }
@@ -1880,11 +1952,13 @@ async function processPeirce() {
   btn.disabled = true; btn.innerHTML = '<span>...</span> Analizando';
   resp.classList.add('visible'); labelEl.className = 'response-label'; labelEl.textContent = 'Agente procesando'; textEl.textContent = '';
   try {
+    let fullResp = '';
     await callGroq([{ role: 'user', content: `Mi situacion${qInfo}: "${input}"
  
-Diagnostico peirceano: cuadrante real, trampa del yo, tiempo lineal o circular, ADO en la Zona de Emergencia, movimiento correcto. Integra la Palabra que ordeno segun Parise. Termina con una declaracion en tiempo PRESENTE.` }], t => textEl.textContent = t);
+Diagnostico peirceano: cuadrante real, trampa del yo, tiempo lineal o circular, ADO en la Zona de Emergencia, movimiento correcto. Integra la Palabra que ordeno segun Parise. Termina con una declaracion en tiempo PRESENTE.` }], t => { fullResp = t; textEl.textContent = t; });
     labelEl.className = 'response-label done'; labelEl.textContent = 'Diagnostico completo';
-    await registerUsage('peirce');
+    await registerUsage('peirce', input + qInfo, fullResp);
+    await loadHistorial('peirce', 'historialPeirce');
   } catch { textEl.textContent = 'Error de conexion.'; }
   btn.disabled = false; btn.innerHTML = '<span>◈</span> Diagnostico semiotico con IA';
 }
@@ -1950,7 +2024,8 @@ async function sendChat() {
     let full = '';
     await callGroq(chatHistory, t => { full = t; updateChatMsg(tid, t); });
     chatHistory.push({ role: 'assistant', content: full });
-    await registerUsage('chat');
+    await registerUsage('chat', msg, full);
+    await loadHistorial('chat', 'historialChat');
   } catch { updateChatMsg(tid, 'Error de conexion.'); }
   document.getElementById('btnSend').disabled = false;
   scrollChat();
